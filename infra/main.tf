@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 data "aws_cognito_user_pools" "point-user-pool" {
-  name = "point-user-pool"
+  name = "point"
 }
 
 data "aws_cognito_user_pool_clients" "point-user-pool-app-client" {
