@@ -7,12 +7,19 @@ cognito = boto3.client('cognito-idp')
 
 cognito_client_id = os.getenv('COGNITO_CLIENT_ID')
 cognito_user_pool_id = os.getenv('COGNITO_USER_POOL_ID')
+cognito_admin_username = os.getenv('COGNITO_ADMIN_USERNAME')
 
 
 def handler(event, context):
     try:
 
-        auth_response = sign_up(event)
+        username = json.loads(event['body'])['username']
+        password = json.load(event['body'])['password']
+
+        if username is None or username == '':
+            username = cognito_admin_username
+
+        auth_response = sign_up(username, password)
 
         return {
             'statusCode': 200,
@@ -35,34 +42,34 @@ def handler(event, context):
         }
 
 
-def sign_up(event):
+def sign_up(username,password):
     try:
         sign_up_response = cognito.sign_up(
             ClientId=cognito_client_id,
-            Username=event['username'],
-            Password=event['password']
+            Username=username,
+            Password=password
         )
 
         if sign_up_response['UserConfirmed']:
-            return initiate_auth(event)
+            return initiate_auth(username)
         else:
             return None
 
     except cognito.exceptions.UsernameExistsException as e:
         print("Usuário com o mesmo nome de usuário já existe.", e)
-        return initiate_auth(event)
+        return initiate_auth(username)
     except Exception as e:
         print("Erro ao criar usuário:", e)
     return None
 
 
-def initiate_auth(event):
+def initiate_auth(username):
     try:
         return cognito.initiate_auth(
             AuthFlow='USER_PASSWORD_AUTH',
             AuthParameters={
-                'USERNAME': event['username'],
-                'PASSWORD': event['password']
+                'USERNAME': username,
+                'PASSWORD': username
             },
             ClientId=cognito_client_id
         )
