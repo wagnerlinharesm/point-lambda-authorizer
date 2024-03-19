@@ -12,9 +12,9 @@ cognito_admin_username = os.getenv('COGNITO_ADMIN_USERNAME')
 
 def handler(event, context):
     try:
-
+        print(event)
         username = json.loads(event['body'])['username']
-        password = json.load(event['body'])['password']
+        password = json.loads(event['body'])['password']
 
         if username is None or username == '':
             username = cognito_admin_username
