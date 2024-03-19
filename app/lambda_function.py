@@ -57,7 +57,7 @@ def sign_up(username,password):
 
     except cognito.exceptions.UsernameExistsException as e:
         print("Usuário com o mesmo nome de usuário já existe.", e)
-        return initiate_auth(username)
+        return initiate_auth(username, password)
     except Exception as e:
         print("Erro ao criar usuário:", e)
     return None
