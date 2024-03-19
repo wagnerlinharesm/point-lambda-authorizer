@@ -51,7 +51,7 @@ def sign_up(username,password):
         )
 
         if sign_up_response['UserConfirmed']:
-            return initiate_auth(username)
+            return initiate_auth(username, password)
         else:
             return None
 
@@ -63,13 +63,13 @@ def sign_up(username,password):
     return None
 
 
-def initiate_auth(username):
+def initiate_auth(username, password):
     try:
         return cognito.initiate_auth(
             AuthFlow='USER_PASSWORD_AUTH',
             AuthParameters={
                 'USERNAME': username,
-                'PASSWORD': username
+                'PASSWORD': password
             },
             ClientId=cognito_client_id
         )
