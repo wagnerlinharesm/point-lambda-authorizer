@@ -7,11 +7,6 @@
       "Principal": {
         "Service": "lambda.amazonaws.com"
       }
-    },
-    {
-      "Action": "cognito-idp:AdminGetUser",
-      "Effect": "Allow",
-      "Resource": "arn:aws:cognito-idp:us-east-2:644237782704:userpool/us-east-2_3HJlRalTj"
     }
   ]
 }

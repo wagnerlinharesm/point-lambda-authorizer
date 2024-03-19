@@ -15,6 +15,21 @@ resource "aws_iam_role" "point_lambda_authorizer_role" {
   assume_role_policy = file("policy/lambda_assume_role_policy.json")
 }
 
+resource "aws_iam_role_policy" "point_lambda_authorizer_policy" {
+  name   = "point_lambda_authorizer_policy"
+  role   = aws_iam_role.point_lambda_authorizer_role.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect    = "Allow"
+        Action    = "cognito-idp:AdminGetUser"
+        Resource  = "arn:aws:cognito-idp:us-east-2:644237782704:userpool/us-east-2_3HJlRalTj"
+      }
+    ]
+  })
+}
+
 resource "aws_lambda_function" "point_lambda_authorizer" {
   function_name = "point_lambda_authorizer"
   handler       = "app/lambda_function.handler"
