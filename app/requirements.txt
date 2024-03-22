@@ -2,4 +2,4 @@ boto3
 botocore
 requests
 requests-aws4auth
-psycopg2
+psycopg2-binary
