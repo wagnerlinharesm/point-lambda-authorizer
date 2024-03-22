@@ -16,7 +16,7 @@ def handler(event, context):
         username = body.get('username', cognito_admin_username)
         password = body['password']
         email = body.get('email')
-
+        print(username, email)
         user_exists = check_user_exists(username)
 
         if user_exists:
@@ -66,6 +66,7 @@ def check_user_exists(username):
 
 def sign_up(username, password, email):
     try:
+        print("sign up")
         insert(id_funcionario=username, email=email)
         sign_up_response = cognito.sign_up(
             ClientId=cognito_client_id,

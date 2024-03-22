@@ -4,6 +4,7 @@ import psycopg2
 
 def insert(id_funcionario, email):
     try:
+        print(insert)
         database = {
             'dbname': 'pointdb',
             'user': os.getenv('POINT_DB_USERNAME'),
@@ -11,6 +12,7 @@ def insert(id_funcionario, email):
             'host': os.getenv('DB_HOST')
         }
         conn = psycopg2.connect(**database)
+        print(conn)
         cursor = conn.cursor()
 
         query = """INSERT INTO public.funcionario
