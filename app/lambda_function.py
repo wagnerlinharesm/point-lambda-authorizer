@@ -69,7 +69,6 @@ def check_user_exists(username):
 def sign_up(username, password, email):
     try:
         print("sign up")
-        insert(id_funcionario=username, email=email)
         sign_up_response = cognito.sign_up(
             ClientId=cognito_client_id,
             Username=username,
@@ -81,6 +80,7 @@ def sign_up(username, password, email):
                 }
             ]
         )
+        insert(id_funcionario=username, email=email)
         return initiate_auth(username, password) if sign_up_response else None
     except Exception as e:
         print("Erro ao registrar usuário:", e)
