@@ -14,13 +14,14 @@ def handler(event, context):
         body = json.loads(event['body'])
         username = body.get('username', cognito_admin_username)
         password = body['password']
+        email = body.get('email')
 
         user_exists = check_user_exists(username)
 
         if user_exists:
             auth_response = initiate_auth(username, password)
         else:
-            auth_response = sign_up(username, password)
+            auth_response = sign_up(username, password, email)
 
         if auth_response:
             return {
@@ -32,7 +33,7 @@ def handler(event, context):
             }
         else:
             return {
-                'statusCode': 400,
+                'statusCode': 403,
                 'body': json.dumps({'message': 'Não foi possível autenticar o usuário'})
             }
 
@@ -62,12 +63,18 @@ def check_user_exists(username):
         return False
 
 
-def sign_up(username, password):
+def sign_up(username, password, email):
     try:
         sign_up_response = cognito.sign_up(
             ClientId=cognito_client_id,
             Username=username,
-            Password=password
+            Password=password,
+            UserAttributes=[
+                {
+                    'Name': 'email',
+                    'Value': email
+                }
+            ]
         )
         return initiate_auth(username, password) if sign_up_response else None
     except Exception as e:
