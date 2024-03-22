@@ -52,10 +52,12 @@ def handler(event, context):
 
 def check_user_exists(username):
     try:
+        print("check_user_exists")
         response = cognito.admin_get_user(
             UserPoolId=cognito_user_pool_id,
             Username=username
         )
+        print(response)
         return True if response else False
     except cognito.exceptions.UserNotFoundException:
         return False
