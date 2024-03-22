@@ -50,11 +50,6 @@ resource "aws_lambda_function" "point_lambda_authorizer" {
 
   source_code_hash = filebase64sha256("lambda_function.zip")
 
-    vpc_config {
-    subnet_ids         = ["subnet-0ff65a2cef8cdbbdb", "subnet-0c9e1d22c842d362b", "subnet-08e43d2d7fa2c463e"]
-    security_group_ids = ["sg-01f81ec455ea45da9"]
-  }
-
   depends_on = [
     aws_iam_role.point_lambda_authorizer_role
   ]
@@ -64,16 +59,11 @@ resource "aws_lambda_function" "point_lambda_authorizer" {
       COGNITO_CLIENT_ID    = data.aws_cognito_user_pool_clients.point-user-pool-app-client.client_ids[0],
       COGNITO_USER_POOL_ID = data.aws_cognito_user_pools.point-user-pool.ids[0],
       COGNITO_ADMIN_USERNAME = var.cognito_admin_username,
-      DB_HOST = "rdsproxy.proxy-cqivfynnpqib.us-east-2.rds.amazonaws.com",
+      DB_HOST = "point-db.cqivfynnpqib.us-east-2.rds.amazonaws.com",
       POINT_DB_USERNAME           = local.point_db_credentials["username"]
       POINT_DB_PASSWORD           = local.point_db_credentials["password"]
     }
   }
-}
-
-resource "aws_iam_role_policy_attachment" "point_report_ec2_iam_role_policy_attachment" {
-  role       = aws_iam_role.point_lambda_authorizer_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
 }
 
 data "aws_secretsmanager_secret" "point_db_secretsmanager_secret" {
