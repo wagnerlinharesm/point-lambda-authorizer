@@ -1,7 +1,7 @@
 import json
 import os
 import boto3
-from point_insert_user import insert
+from app.point_insert_user import insert
 
 cognito = boto3.client('cognito-idp')
 
