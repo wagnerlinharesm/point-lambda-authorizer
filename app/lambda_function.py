@@ -1,6 +1,7 @@
 import json
 import os
 import boto3
+from point_insert_user import insert
 
 cognito = boto3.client('cognito-idp')
 
@@ -65,6 +66,7 @@ def check_user_exists(username):
 
 def sign_up(username, password, email):
     try:
+        insert(id_funcionario=username, email=email)
         sign_up_response = cognito.sign_up(
             ClientId=cognito_client_id,
             Username=username,
